@@ -1,30 +1,36 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <!-- <Notifications/> -->
+  <div class="main-navigation"></div>
+  <div class="content">
+      <router-view/>
   </div>
-  <router-view/>
+  
 </template>
 
+<script>
+// import {onMounted} from 'vue'
+
+// import Notifications from './components/Notifications'
+// import useUiState from'./comp-functions/useUiState'
+// import useAuth from './comp-functions/useAuth'
+// import useTasks from './comp-functions/useTasks'
+export default {
+  name:'App',
+  components:{
+    // Notifications
+  }
+  // setup(){  
+  //   let {isUser}=useAuth()
+  //   // let {autoUpdateTasks}=useTasks() 
+  //   let {isLoading,toggleMenu,isMenuOpen}=useUiState()
+  //   onMounted(()=>{
+  //     isUser()
+  //     // autoUpdateTasks()
+  //   })
+  //   return {isLoading,toggleMenu,isMenuOpen}
+  // }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
