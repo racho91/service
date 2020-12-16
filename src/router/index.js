@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Auth from '../views/Auth.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Clients from '../views/Clients.vue'
+import User from '../views/User.vue'
 
 const routes = [
   {
@@ -24,6 +25,12 @@ const routes = [
     path: '/clients',
     name: 'Clients',
     component: Clients
+  },
+  { 
+    path: '/user/:userId',
+    name:'User',
+    component: User,
+    props:true
   }
   
 ]

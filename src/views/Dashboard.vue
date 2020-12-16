@@ -1,6 +1,6 @@
 <template>
 <div class="dashboard">
-  
+  <p><router-link :to="{ name: 'Clients' }"> Клиенти </router-link></p>
   <CreateTask  />
   <Button @button-click="handleActive('showActiveTasks')" title="Активни" color="blue" type="reverse" />  
   <Button @button-click="handleActive('showAweitingTasks')" title="Чакащи взимане" color="blue" type="reverse" />  

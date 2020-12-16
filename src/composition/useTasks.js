@@ -22,8 +22,8 @@ const state = reactive({
 
 
 const createTask= (newTask,clientId)=>{
-    let localDate = new Date
-    localDate = localDate.toLocaleString()
+    let localDate = Math.floor(Date.now() / 1000)
+ 
     console.log('eha',newTask,clientId)
     let taskData ={
         ...newTask,
@@ -160,6 +160,27 @@ export default function useTasks(){
         state.task = []
     }
 
+    const getTaskByClient = (id)=>{
+        return new Promise ((resolve,reject)=>{
+            let tasks = []
+            db.collection('tasks').where('client','==',id).get()
+            .then((result)=> {
+                result.forEach((doc)=>{
+                    tasks.push({
+                    id:doc.id,
+                    ...doc.data()
+                })
+            }) 
+            resolve (tasks)
+            })
+            .catch((err)=>{
+                console.log('getTaskByClient',err.message)
+                reject
+            })
+    
+        })
+    }
+
 
     return { 
         // tasks: computed(()=>state.tasks),
@@ -172,6 +193,7 @@ export default function useTasks(){
         updateTask,
         clearTasks,
         autoUpdateTasks,
-        changeTaskStatus
+        changeTaskStatus,
+        getTaskByClient
     }
 }

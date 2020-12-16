@@ -5,7 +5,7 @@
         <div class="desc">
             <p class="info">
                 <strong v-if="task.status==='returned'">!</strong>
-                {{task.type}} -  <strong class="orange">{{task.owner}} </strong>
+                {{task.type}} - <router-link :to="/user/+task.client"> <strong class="orange">{{task.owner}} </strong></router-link>
                 <strong class="red" v-if="task.status==='returned'"> Върната</strong>
                 <strong class="green" v-if="task.status==='active'"> Активна</strong>
                 <strong class="blue" v-if="task.status==='aweiting'"> Чака вземане</strong>
@@ -139,6 +139,10 @@ export default {
 </script>
 
 <style>
+a{
+    text-decoration: none;
+    cursor:pointer;
+}
 .task{
     width: 80%;
     margin: auto;

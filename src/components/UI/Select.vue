@@ -2,7 +2,7 @@
     <label for="name">
         {{label}}
         <select name="name" id="name" >
-            <option v-for="(option,index) in options" :key="index" value="option">Volvo</option>
+            <option v-for="(option,index) in options" :key="index" value="option">{{option}}</option>
         </select>
     </label>
     
@@ -14,7 +14,7 @@ export default {
     props:{
         options:Array,
         label:String,
-        data:String,
+        data:Number,
         name:{
             type:String,
             default:''

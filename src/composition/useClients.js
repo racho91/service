@@ -97,16 +97,26 @@ export default function useClients(){
         state.curentClient.id= ''
     }
 
+    const getClientById = (id)=>{
+        return new Promise ((resolve,reject)=>{
+            db.collection('clients').doc(id).get()
+            .then((doc)=> resolve(doc.data()) )
+            .catch(()=>reject)
+    
+        })
+    }
+
 
     return { 
         ...toRefs(state),
-        clients2:computed(state.clients),
+        clients2:computed(()=>{return state.clients}),
         addClient,
         removeClient,
         updateClient,
         clearClients,
         autoUpdateClients,
         clearCurentClient,
-        autoSelectClients
+        autoSelectClients,
+        getClientById
     }
 }
