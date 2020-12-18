@@ -1,8 +1,8 @@
 <template>
   <p>Активни задачи</p>
-  <div class="controll-">
+  <!-- <div class="controll-">
     <AutoCompliteInput v-model:data="pageSize" label="Задачи на старница"  name="ps" id="ps" :options="pageSizeOptions"    />
-  </div>
+  </div> -->
   <div class="page" v-for="page in pagination.pagesArray" :key="page"  >
       <div class="active-page"  v-if="page===activePage">
         <div class="row" v-for="(item,index) in pagination.itemsPerPageArray" :key="index">
@@ -25,7 +25,7 @@
 <script>
 import Task from '../components/Task'
 import Button from '../components/UI/Button'
-import AutoCompliteInput from '../components/UI/AutoComliteInput'
+// import AutoCompliteInput from '../components/UI/AutoComliteInput'
 
 import useTask from '../composition/useTasks'
 import useHelpers from '../composition/useHelpers'
@@ -35,7 +35,7 @@ export default {
   components:{
     Task,
     Button,
-    AutoCompliteInput
+    // AutoCompliteInput
   },
   setup(){
     
@@ -43,7 +43,7 @@ export default {
     const {paginateArray}=useHelpers()
 
     const state = reactive({
-      pageSize:"10",
+      pageSize:"999",
       pageSizeOptions:[
           {name:'',value:'5'},
           {name:'',value:"10"}

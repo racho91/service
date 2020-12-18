@@ -25,7 +25,7 @@ export default {
 <style>
 .pdf-header{
   width: 95%;
-  height: 27mm;
+  height: 32mm;
   position: relative;
   border-bottom: 1mm solid gray;
   margin: 0;
@@ -43,12 +43,13 @@ export default {
 }
 
 .pdf-info p{
-  font-size: 0.9em;
-  line-height: 1.3em
+    font-size: 0.9em;
+    line-height: 1.2em;
+    text-align: left;
 }
 .pdf-image{
   display: inline-block;
-  width: 24%;
+  width: 28%;
   position: absolute;
   right: 0;
   top: 0;

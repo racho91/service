@@ -1,6 +1,6 @@
 <template>
 
-  <Modal openButtonName="Създаване на задача" :isActive="activeModal" openButtonColor="#145A32 " @close-modal="closeModal" @open-modal="openModal"> 
+  <Modal openButtonName="Създаване на задача" :isActive="activeModal" openButtonColor="#59CD90" @close-modal="closeModal" @open-modal="openModal"> 
     <template v-slot:modal-header> 
         <h4>Създаване на задача</h4>
     </template>
@@ -12,8 +12,8 @@
       <Input v-model:data="description" type="textarea" label="Описание" name="desc" id="Desc"/>
     </template>
     <template v-slot:modal-actions> 
-      <Button @button-click="clearSelected" title="Изчисти" color="#D35400" type="reverse" />  
-      <Button @button-click="createTask" title="Запиши" color="#30A106" type="reverse" /> 
+      <Button @button-click="clearSelected" title="Изчисти" color="#FAC05E" type="normal" />  
+      <Button @button-click="createTask" title="Запиши" color="#59CD90" type="normal" /> 
     </template>
   </Modal>
 
@@ -65,8 +65,8 @@
         </div>
         
         <div class="warning">
-            <p><strong>"ССН Консулт" ЕООД не носи отговорност за нелицензиран софтуер!</strong></p>
-            <p><strong>"ССН Консулт" ЕООД не носи отговорност за непотърсени, ремонтирани устройства след изминали 14 дни от датата на уведомяване за преключен ремонт!</strong></p>
+            <p><strong>"ССН Консулт" ЕООД не носи отговорност за нелицензиран  софтуер!</strong></p>
+            <p><strong>"ССН Консулт" ЕООД не носи отговорност за непотърсени, отремонтирани устройства след изминали 14 дни от датата на уведомяване за приключен ремонт!</strong></p>
         </div>
         <br>
       </div>
@@ -264,6 +264,8 @@ export default {
 
 .pdf-content p {
   margin-bottom: 1mm;
+  line-height: 1.2em;
+  margin-top:2mm ;
 }
 .inform{
   margin: auto;
@@ -274,7 +276,7 @@ export default {
 .warning{
   margin: auto;
   width: 90%;
-  padding: 5mm;
+  padding: 3mm;
   border:1mm solid red;
   }
 

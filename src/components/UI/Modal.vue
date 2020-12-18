@@ -1,19 +1,22 @@
 <template>
-    <Button @button-click="$emit('open-modal')"  :title="openButtonName" :color="openButtonColor" type="reverse"></Button>
-    <form v-if="isActive === true" class="modal-wrap" action autocomplete="off">
-        <div  class="modal">
-            <div class="modal-header">
-                <slot name="modal-header" ></slot>
+    <Button v-if="modalType!= 'icon'" @button-click="$emit('open-modal')"  :title="openButtonName" :color="openButtonColor" type="reverse"></Button>
+    <i  v-if="modalType ==='icon'" class="fas" :class="openButtonName" :style="{color:openButtonColor}" @click="$emit('open-modal')"></i>
+    <teleport to="body">
+        <form v-if="isActive === true" class="modal-wrap" action autocomplete="off">
+            <div  class="modal">
+                <div class="modal-header">
+                    <slot name="modal-header" ></slot>
+                </div>
+                <div class="modal-content">
+                    <slot name="modal-content" ></slot>
+                </div>
+                <div class="modal-actions">
+                    <slot name="modal-actions" ></slot>
+                    <Button @button-click="$emit('close-modal')" title="Затвори" color="#EE6352" type="normal"></Button>
+                </div>
             </div>
-            <div class="modal-content">
-                <slot name="modal-content" ></slot>
-            </div>
-            <div class="modal-actions">
-                <slot name="modal-actions" ></slot>
-                <Button @button-click="$emit('close-modal')" title="Затвори" color="red" type="reverse"></Button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </teleport>    
 </template>
 
 <script>
@@ -25,7 +28,11 @@ export default {
     props:{
         'isActive':Boolean,
         'openButtonName':String,
-        'openButtonColor':String
+        'openButtonColor':String,
+        'modalType':{
+            default:'',
+            type:String
+        }
     },
     components:{
         Button
@@ -49,7 +56,7 @@ export default {
 
 <style>
 .modal-wrap{
-    position: absolute;
+    position: fixed;
     display: flex;
     width: 100%;
     height: 100vh;
@@ -59,6 +66,7 @@ export default {
     align-items:center ;
     /* align-content: center; */
     text-align: center; 
+    z-index:9;
 }
 .modal{
     margin: auto;
@@ -77,5 +85,7 @@ export default {
     border-top: 1px solid black;
     margin-top: 1em;
 }
-
+i{
+    margin-left: 10px;
+}
 </style>

@@ -2,11 +2,11 @@
 <div class="dashboard">
   <p><router-link :to="{ name: 'Clients' }"> Клиенти </router-link></p>
   <CreateTask  />
-  <Button @button-click="handleActive('showActiveTasks')" title="Активни" color="blue" type="reverse" />  
-  <Button @button-click="handleActive('showAweitingTasks')" title="Чакащи взимане" color="blue" type="reverse" />  
-  <Button @button-click="handleActive('showComplitedTasks')" title="Завършени" color="blue" type="reverse" />  
-  <Button @button-click="handleActive('showAllTasks')" title="Всички" color="blue" type="reverse" />  
-  <Button @button-click="signOut" title="Изход" color="red" type="reverse" />
+  <Button @button-click="handleActive('showActiveTasks')" title="Активни" color="#FAC05E" type="normal" />  
+  <Button @button-click="handleActive('showAweitingTasks')" title="Чакащи взимане" color="#59CD90" type="normal" />  
+  <Button @button-click="handleActive('showComplitedTasks')" title="Завършени" color="#3FA7D6" type="normal" />  
+  <Button @button-click="handleActive('showAllTasks')" title="Всички" color="#3FA7D6" type="reverse" />  
+  <Button @button-click="signOut" title="Изход" color="#EE6352" type="normal" />
   <ActiveTasks v-if="showActiveTasks"/>
   <AweitingTasks v-if="showAweitingTasks" />
   <ComplitedTasks v-if="showComplitedTasks"/>

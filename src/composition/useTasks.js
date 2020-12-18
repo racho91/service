@@ -20,20 +20,24 @@ const state = reactive({
 });
 
 
+const addData = ()=>{return Math.floor(Date.now() / 1000)} 
+
 
 const createTask= (newTask,clientId)=>{
-    let localDate = Math.floor(Date.now() / 1000)
+    
  
     console.log('eha',newTask,clientId)
     let taskData ={
         ...newTask,
         client:clientId,
+        createdAt: addData(),
+        updatedAt: addData(),
         history:[
             {
                 changetTo:'active',
                 from:user.value.name,
                 message:'Приемане за ремонт в сервиз',
-                timeStamp: localDate
+                timeStamp: addData()
             }
         ]
     }
@@ -64,6 +68,16 @@ export default function useTasks(){
         return createTask(newTask,client.id)     
     }
 
+    // //to fix date stamps    
+
+    // const setDataStamp = (task)=>{
+    //     db.collection('tasks').doc(task.id).update({
+    //         ...task,
+    //         createdAt: '1606780800',
+    //         updatedAt:'1606780800'
+    //     })
+    // }
+
     const updateTask = (task)=>{
         let updatedTask={
             name : task.name,
@@ -84,18 +98,19 @@ export default function useTasks(){
 
     const changeTaskStatus = (taskId,status,history,message)=>{
         console.log(taskId,status)
-        let localDate = new Date
-        localDate = localDate.toLocaleString()
+        // let localDate = addData
+        // localDate = localDate.toLocaleString()
         let  task = db.collection('tasks').doc(taskId)
         task.update({
             status:status,
+            updatedAt:addData(),
             history:[
                 ...history,
                 {
                     changetTo:status,
                     from:user.value.name,
                     message:message,
-                    timeStamp: localDate
+                    timeStamp: addData()
                 }
             ] 
         })
@@ -144,6 +159,14 @@ export default function useTasks(){
                 })
                 // console.log('all task')
             })
+
+            // myList.sort(function(x, y){
+            //     return x.timestamp - y.timestamp;
+            // })
+            state.tasks.sort((x,y)=>y.createdAt - x.createdAt)
+            state.activeTasks.sort((x,y)=>y.createdAt - x.createdAt)
+            state.aweitingTasks.sort((x,y)=>y.createdAt - x.createdAt)
+            state.complitedTasks.sort((x,y)=>y.createdAt - x.createdAt)
             addNotification('Задачите са заредени или е променено е съдържание в задачите !','info',7000)
         })
     }
@@ -171,6 +194,7 @@ export default function useTasks(){
                     ...doc.data()
                 })
             }) 
+            tasks.sort((x,y)=>y.createdAt - x.createdAt)
             resolve (tasks)
             })
             .catch((err)=>{
@@ -194,6 +218,7 @@ export default function useTasks(){
         clearTasks,
         autoUpdateTasks,
         changeTaskStatus,
-        getTaskByClient
+        getTaskByClient,
+        // setDataStamp
     }
 }

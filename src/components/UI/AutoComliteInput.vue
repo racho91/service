@@ -132,6 +132,8 @@ label:focus-within {
 .suggestion{
     cursor: pointer;
     width: 100%;
+}
+.suggestion > div {
     border-bottom: 1px solid white;
 }
 .suggestion:hover{

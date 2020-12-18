@@ -10,11 +10,14 @@
                 <strong class="green" v-if="task.status==='active'"> Активна</strong>
                 <strong class="blue" v-if="task.status==='aweiting'"> Чака вземане</strong>
                 <strong class="gray" v-if="task.status==='complited'"> Завършена</strong>
+                <span class="date">{{handleTime(task.createdAt)}}</span> 
+                <span v-if="task.status!='active'" class="date-updated">{{handleTime(task.updatedAt)}}</span> 
            </p>
         </div>
         <div class="actions">
-            <Button title="Преглед" color="blue" type="normal" @button-click="openCloseInfo"/>
-            <Modal v-if="task.status==='active'||task.status==='returned'" openButtonName="Завърши" :isActive="activeMoadalActive" openButtonColor="red" @close-modal="openCloseModalActive" @open-modal="openCloseModalActive"> 
+            <!-- <Button title="Преглед" color="blue" type="normal" @button-click="openCloseInfo"/> -->
+            <i class="fas fa-eye blue"  @click="openCloseInfo" ></i>
+            <Modal v-if="task.status==='active'||task.status==='returned'" modalType="icon" openButtonName="fa-check" :isActive="activeMoadalActive" openButtonColor="#FAC05E" @close-modal="openCloseModalActive" @open-modal="openCloseModalActive"> 
                 <template v-slot:modal-header> 
                     <h4>завършен ремонт</h4>
                 </template>
@@ -22,10 +25,10 @@
                     <Input v-model:data="message" type="textarea" label="Описание на промените" name="desc" id="Desc"/>
                 </template>
                 <template v-slot:modal-actions> 
-                <Button title="Завърши" color="red" type="reverse" @button-click="changeTaskStatus(task.id,'aweiting',task.history,message)"/>
+                <Button title="Завърши" color="red" type="reverse" @button-click="changeTaskStatus(task.id,'aweiting',task.history,message);closeAllModals()"/>
                 </template>
             </Modal>
-            <Modal v-if="task.status==='aweiting'" openButtonName="Връщане на клиент" :isActive="activeMoadalAweiting" openButtonColor="green" @close-modal="openCloseModalAweiting" @open-modal="openCloseModalAweiting"> 
+            <Modal v-if="task.status==='aweiting'" modalType="icon" openButtonName="fa-check-circle" :isActive="activeMoadalAweiting" openButtonColor="#59CD90" @close-modal="openCloseModalAweiting" @open-modal="openCloseModalAweiting"> 
                 <template v-slot:modal-header> 
                     <h4>Връщане на клиент</h4>
                 </template>
@@ -39,10 +42,10 @@
                     <Input v-model:data="message" type="textarea" label="Описание на промените" name="desc" id="Desc"/>
                 </template>
                 <template v-slot:modal-actions> 
-                <Button title="Връщане на клиент" color="green" type="reverse" @button-click="changeTaskStatus(task.id,'complited',task.history,message)" />
+                <Button title="Връщане на клиент" color="green" type="reverse" @button-click="changeTaskStatus(task.id,'complited',task.history,message);closeAllModals()" />
                 </template>
             </Modal>
-            <Modal v-if="task.status==='aweiting'||task.status==='complited'" openButtonName="Връщане в сервиза" :isActive="activeMoadalComplited" openButtonColor="blue" @close-modal="openCloseModalComplited" @open-modal="openCloseModalComplited"> 
+            <Modal v-if="task.status==='aweiting'||task.status==='complited'" modalType="icon" openButtonName="fa-undo" :isActive="activeMoadalComplited" openButtonColor="#F79D84" @close-modal="openCloseModalComplited" @open-modal="openCloseModalComplited"> 
                 <template v-slot:modal-header> 
                     <h4>Връщане в сервиза</h4>
                 </template>
@@ -50,16 +53,19 @@
                     <Input v-model:data="message" type="textarea" label="Описание на промените" name="desc" id="Desc"/>
                 </template>
                 <template v-slot:modal-actions> 
-                <Button title="Направи активна" color="blue" type="reverse" @button-click="changeTaskStatus(task.id,'returned',task.history,message)"/>  
+                <Button title="Направи активна" color="blue" type="reverse" @button-click="changeTaskStatus(task.id,'returned',task.history,message);closeAllModals()"/>  
                 </template>
             </Modal>
+            
         </div>
         <div v-if="info" class="info">
             <p>Описание:{{task.desc}}</p>
             <p>Тип:{{task.type}} || Състоние:{{task.condition}} ||  ИД:{{task.id}}</p>
+            <p>Дата на създаване: {{handleTime(task.createdAt)}}  || Дата на послено действие: {{handleTime(task.updatedAt)}}</p>
             <p>История:</p>
-            <p v-for="(state,index) in task.history" :key="index">{{index+1}} -- {{state.timeStamp}} -- {{state.from}} : {{state.message}} || Статус:{{handleStatusText(state.changetTo)}}</p>
+            <p v-for="(state,index) in task.history" :key="index">{{index+1}} -- {{ handleTime(state.timeStamp)}} -- {{state.from}} : {{state.message}} || Статус:{{handleStatusText(state.changetTo)}}</p>
             <!-- {{task}} -->
+            <!-- <i class="fas fa-trash-alt" @click="removeTask(task.id)"></i> -->
 
         </div>
     
@@ -97,6 +103,12 @@ export default {
             activeMoadalComplited:false,
         })
 
+        const handleTime = (text)=>{
+            let textToInt = Math.round(text)*1000
+            let data = new Date(textToInt).toLocaleString("bg-BG")
+            return data
+        }
+
         const handleStatusText = (text)=>{
             if(text === 'active'){
                 return 'Приет в сервиз'
@@ -122,6 +134,13 @@ export default {
         const openCloseModalComplited = ()=>{
             data.activeMoadalComplited=!data.activeMoadalComplited
         }
+
+        const closeAllModals = ()=>{
+            data.activeMoadalComplited=false
+            data.activeMoadalAweiting=false
+            data.activeMoadalActive=
+            console.log('yes be')
+        }
         
 
         return {
@@ -131,7 +150,9 @@ export default {
             changeTaskStatus,
             openCloseModalActive,
             openCloseModalAweiting,
-            openCloseModalComplited
+            openCloseModalComplited,
+            closeAllModals,
+            handleTime
         }
     }
 
@@ -144,21 +165,38 @@ a{
     cursor:pointer;
 }
 .task{
-    width: 80%;
+    position: relative;
+    z-index: 1;
+    width: 90%;
     margin: auto;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 0px;
     border: 1px solid lightgrey;
-    border-radius: 4px;
+    border-radius: 1px;
+    transition: all 0.3s ease-in-out;
+    background: #f3f3f3;
+    /* box-shadow: rgba(0, 0, 0, 0.5) 3px 6px 10px; */
 }
-.task:nth-child(odd){
+/* .task:nth-child(odd){
     background-color: lightgrey;
+} */
+/* .task::hover{
+    
+} */
+.task:hover{
+    z-index: 2;
+    box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 11px;
+    background: #fff;
+    transform: scale(1.01);
+
 }
 .desc{
+    
     width: 64%;
     display: inline-block;
 }
 .actions{
+    padding-top: 3px;
     width: 35%;
     display: inline-block;
 }
@@ -172,13 +210,28 @@ color:red
 .green{
 color:green
 }
+.fas{
+    font-size: 1.5em;
+}
 .blue{
-color:blue
+    color: #3FA7D6;
 }
 .gray{
     color:gray
 }
 .orange{
     color: orangered;
+}
+span{
+    font-size: 0.7em;
+    padding: 2px;
+    border-radius: 6px;
+    margin-left: 10px;
+}
+.date{
+    background: #FAC05E;
+}
+.date-updated{
+    background: #3FA7D6;
 }
 </style>

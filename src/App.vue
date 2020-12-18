@@ -33,4 +33,7 @@ export default {
 </script>
 
 <style>
+*{
+  font-family: 'Exo 2', sans-serif;
+}
 </style>
