@@ -115,10 +115,29 @@ export default function useTasks(){
             ] 
         })
         .then(()=>{
-            console.log('status updated')
+            // console.log('status updated')
+            if(status === 'active'){
+                status = 'Приета задача'
+            }
+            if(status === 'aweiting'){
+                status = 'Задачата чака взимане'
+            }
+            if(status === 'complited'){
+                status = 'Задачатра е върната на лиента'
+            }
+            if(status === 'returned'){
+                status = 'задачата е върната в сервиза'
+            }
+            if (message){
+                addNotification(status+' - '+message,'info',7000)
+            }else{
+                addNotification(status,'info',7000)
+            }
+            
         })
         .catch((err)=>{
-            console.log(err)
+            addNotification(err.message,'dangerous',7000)
+            // console.log(err)
         })
     }
 
@@ -167,7 +186,7 @@ export default function useTasks(){
             state.activeTasks.sort((x,y)=>y.createdAt - x.createdAt)
             state.aweitingTasks.sort((x,y)=>y.createdAt - x.createdAt)
             state.complitedTasks.sort((x,y)=>y.createdAt - x.createdAt)
-            addNotification('Задачите са заредени или е променено е съдържание в задачите !','info',7000)
+            // addNotification('Задачите са заредени или е променено е съдържание в задачите !','info',7000)
         })
     }
 

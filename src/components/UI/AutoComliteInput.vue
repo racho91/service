@@ -1,8 +1,9 @@
 <template>
     <div class="form-input">
         <label :for="name">
-            {{label}}
-            <input :disabled="isDisabled" :name="name" type="text" :value="data" :alt="name" @input="inputHandler($event.target.value)" @keyup="filterOptions" @focus="handleFokus(true)" @blur="handleFokus(false)" autocomplete="off">
+            <h5>{{label}}</h5>
+            
+            <input :disabled="isDisabled"  :name="name" type="text" :value="data" :alt="name" @input="inputHandler($event.target.value)" @keyup="filterOptions" @focus="handleFokus(true)" @blur="handleFokus(false)" autocomplete="off">
             <div v-if="isSelectable&&filtredOptions.length >0&&!isDisabled&&fokus" class="suggestions">
                 <div v-for="(option,index) in filtredOptions" :key="option.id" class="suggestion">
                     <div v-if="index<5"  @click="handleSelected(option.value)">
@@ -11,12 +12,13 @@
                     </div>  
                 </div>
             </div>
+            <span class="sp"> {{error}}</span>
         </label>
     </div>
 </template>
 
 <script>
-import { toRefs,reactive} from 'vue';
+import { toRefs,reactive,watch} from 'vue';
 export default {
     props:{
         data:String,
@@ -32,14 +34,26 @@ export default {
         isDisabled:{
             default:false,
             type:Boolean
+        },
+        simbols:{
+            default:3
+        },
+        inputError:{
+            type:Boolean,
+            default:false
+        },
+        chekForError:{
+            type:Boolean,
+            default:false
         }
     },
-    emits:['update:data'],
+    emits:['update:data','update:inputError'],
     setup(props,{emit}){
         const state = reactive({
             filtredOptions:[],
             isSelectable:false,
-            fokus:false
+            fokus:false,
+            error:''
         })
         const handleSelected =(value)=>{
             emit('update:data', value)
@@ -62,20 +76,46 @@ export default {
             filterOptions(),
             setFokus(value)
             
+            
         }
+
+        
         const setFokus = (value)=>{
             setTimeout(()=>{
                state.fokus=value 
+               handleError()
             }, 200);
             
         }
+
+        const handleError = ()=>{
+           if ( props.data.length > parseInt(props.simbols)  ){
+               state.error=''
+               emit('update:inputError',false)
+           }else{
+               state.error= 'Недостатично символи !'
+               emit('update:inputError',true)
+           }
+        } 
+        watch(
+            ()=>props.chekForError,
+            (newvalue)=>{
+                if(newvalue){
+                    handleError()
+                }
+               
+            }
+
+        )
+
         return{
             ...toRefs(state),
             handleSelected,
             inputHandler,
             handleFokus,
             setFokus,
-            filterOptions
+            filterOptions,
+            handleError
         }
     }
     
@@ -87,7 +127,7 @@ export default {
 input{
     position: relative;
     margin: auto;
-    margin-bottom: 20px;
+    margin-bottom: 3px;
     width: 100%;
     overflow: hidden;
     height: 20px;
@@ -113,6 +153,11 @@ label:focus-within {
    font-size: 15px;
    text-shadow: 0 0 1px   rgba(11, 74, 0, 0.15);
 }
+
+h5{
+    padding: 1px;
+    margin: auto;
+}
 .form-input{
     position: relative;
     width: 80%;
@@ -120,11 +165,12 @@ label:focus-within {
 }
 .suggestions{
     position: absolute;
-    top: 45px;
+    top: 42px;
     left: 0px;
     width: 100%;
     border: 1px solid black;
     padding: 1px;
+    /* padding-top: -5px; */
     background: black;
     color: white;
     z-index: 1;
@@ -145,6 +191,14 @@ label:focus-within {
 
 .bold{
     font-weight: 700;
+}
+.sp{
+    display: block;
+    margin: auto;
+    text-align: center;
+    color:maroon;
+    /* height: 5px; */
+    margin-bottom: 18px;
 }
 p{
     margin: 0;

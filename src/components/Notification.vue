@@ -1,14 +1,14 @@
 <template>
 
-    <div class="notification" v-if="type==='success'" style="background:#2a9134" > 
+    <div class="notification" v-if="type==='success'" style="background:#59CD90" > 
         <p>{{message}}</p>
         <i class="fas fa-times" @click.prevent="clearNotification" ></i>
     </div>
-    <div class="notification" v-else-if="type==='dangerous'" style="background:#e01e37"  > 
+    <div class="notification" v-else-if="type==='dangerous'" style="background:#EE6352"  > 
         <p>{{message}}</p>
         <i class="fas fa-times" @click.prevent="clearNotification" ></i>
     </div>
-    <div class="notification" v-else  style="background:#00a8e8" > 
+    <div class="notification" v-else  style="background:#3FA7D6" > 
         <p>{{message}}</p>
         <i class="fas fa-times" @click.prevent="clearNotification"></i>
     </div>
@@ -54,19 +54,22 @@ export default {
 
 <style>
 .notification{
+    opacity: .9;
+    font-size: .9em;
   justify-content: space-between;
   display: flex;
   animation-name: disapiar;
   animation-duration: .5s;
   animation-timing-function: ease-in-out;
-  padding: 1em;
-  margin: .3em 1em ;
-  border-radius: .2em;
+  padding: .5em;
+  margin: .2em .7em ;
+  border-radius: .3em;
   color:white;
 }
 
 .notification i {
   color: white;
+  font-size: .9em;
 
 }
 @keyframes disapiar {

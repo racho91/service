@@ -3,6 +3,7 @@
     <div class="task">
         
         <div class="desc">
+            <!-- <p @click="removeTask(task.id)">Изтрий</p> -->
             <p class="info">
                 <strong v-if="task.status==='returned'">!</strong>
                 {{task.type}} - <router-link :to="/user/+task.client"> <strong class="orange">{{task.owner}} </strong></router-link>
@@ -22,10 +23,19 @@
                     <h4>завършен ремонт</h4>
                 </template>
                 <template v-slot:modal-content> 
+                    <h5>Извършени деиствия</h5>
+                    <AutoCompliteInput v-for="(action,index) in actions" v-model:data="actions[index]" :label="index+1+' действие'"  :name="'action' + index" :id="action+index" :options="allServicesList"  :key="index" />
+                    <Button title="Добави действие" color="red" type="reverse" @button-click="addAction"/>
+                    <hr>
+                    <h5>Вложени компоненти</h5>
+                    <AutoCompliteInput v-for="(component,index) in components" v-model:data="components[index]" :label="index+1+' конпонент'"  :name="component + index" :id="component+index" :options="clientOptions"  :key="index" />
+                    <Button title="Добави действие" color="red" type="reverse" @button-click="addComponent"/>
+                    <hr>
                     <Input v-model:data="message" type="textarea" label="Описание на промените" name="desc" id="Desc"/>
                 </template>
                 <template v-slot:modal-actions> 
-                <Button title="Завърши" color="red" type="reverse" @button-click="changeTaskStatus(task.id,'aweiting',task.history,message);closeAllModals()"/>
+                <Button title="Завърши" color="red" type="reverse" @button-click="changeTaskStatus(task.id,'aweiting',task.history,message);closeAllModals();clearMessage()"/>
+                
                 </template>
             </Modal>
             <Modal v-if="task.status==='aweiting'" modalType="icon" openButtonName="fa-check-circle" :isActive="activeMoadalAweiting" openButtonColor="#59CD90" @close-modal="openCloseModalAweiting" @open-modal="openCloseModalAweiting"> 
@@ -43,6 +53,7 @@
                 </template>
                 <template v-slot:modal-actions> 
                 <Button title="Връщане на клиент" color="green" type="reverse" @button-click="changeTaskStatus(task.id,'complited',task.history,message);closeAllModals()" />
+                <p @click="removeTask(task.id)">D</p> 
                 </template>
             </Modal>
             <Modal v-if="task.status==='aweiting'||task.status==='complited'" modalType="icon" openButtonName="fa-undo" :isActive="activeMoadalComplited" openButtonColor="#F79D84" @close-modal="openCloseModalComplited" @open-modal="openCloseModalComplited"> 
@@ -79,12 +90,15 @@ import Button from '../components/UI/Button'
 import Modal from '../components/UI/Modal'
 import Input from '../components/UI/Input'
 import useTasks from'../composition/useTasks'
+import AutoCompliteInput from '../components/UI/AutoComliteInput'
 import { reactive, toRefs } from 'vue'
+import usePrices from '../composition/usePrices'
 export default {
     components:{
         Button,
         Modal,
-        Input
+        Input,
+        AutoCompliteInput
     },
     props:{
         task:Object,
@@ -93,7 +107,8 @@ export default {
         'task-comlite','task-returned','task-renew'
     ],
     setup(){
-        const {changeTaskStatus}=useTasks()
+        const {changeTaskStatus,removeTask}=useTasks()
+        const {allServicesList}=usePrices()
 
         const data= reactive({
             message:'',
@@ -101,6 +116,10 @@ export default {
             activeMoadalActive:false,
             activeMoadalAweiting:false,
             activeMoadalComplited:false,
+            actions:[
+                '',
+            ],
+            components:[]
         })
 
         const handleTime = (text)=>{
@@ -118,6 +137,9 @@ export default {
             }
              if(text === 'complited'){
                 return 'Приключен'
+            }
+            if(text === 'returned'){
+                return 'Върнат в сервиза'
             }
         }
 
@@ -141,6 +163,19 @@ export default {
             data.activeMoadalActive=
             console.log('yes be')
         }
+
+        const clearMessage = ()=>{
+            data.message = ''
+        }
+
+        const addAction = ()=>{
+            data.actions.push('')
+            console.log(data.actions)
+        }
+        const addComponent = ()=>{
+            data.components.push('')
+            console.log(data.components)
+        }
         
 
         return {
@@ -152,7 +187,12 @@ export default {
             openCloseModalAweiting,
             openCloseModalComplited,
             closeAllModals,
-            handleTime
+            handleTime,
+            removeTask,
+            clearMessage,
+            addAction,
+            addComponent,
+            allServicesList
         }
     }
 

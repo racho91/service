@@ -1,12 +1,12 @@
 <template>
 <div class="dashboard">
-  <p><router-link :to="{ name: 'Clients' }"> Клиенти </router-link></p>
+  <p><router-link :to="{ name: 'Clients' }"> Клиенти </router-link>  <router-link :to="{ name: 'Prices' }"> Цени </router-link> </p>
   <CreateTask  />
   <Button @button-click="handleActive('showActiveTasks')" title="Активни" color="#FAC05E" type="normal" />  
   <Button @button-click="handleActive('showAweitingTasks')" title="Чакащи взимане" color="#59CD90" type="normal" />  
   <Button @button-click="handleActive('showComplitedTasks')" title="Завършени" color="#3FA7D6" type="normal" />  
   <Button @button-click="handleActive('showAllTasks')" title="Всички" color="#3FA7D6" type="reverse" />  
-  <Button @button-click="signOut" title="Изход" color="#EE6352" type="normal" />
+  <Button @button-click="signOut()" title="Изход" color="#EE6352" type="normal" />
   <ActiveTasks v-if="showActiveTasks"/>
   <AweitingTasks v-if="showAweitingTasks" />
   <ComplitedTasks v-if="showComplitedTasks"/>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {ref, onMounted, reactive, toRefs } from 'vue'
+import {ref, reactive, toRefs } from 'vue'
 //ui imports
 import Button from '../components/UI/Button'
 // import Modal from '../components/UI/Modal'
@@ -43,7 +43,7 @@ export default {
     AllTasks
   },
   setup(){
-    const {isUser,signOut} = useAuth()
+    const {signOut} = useAuth()
     // const {autoUpdateTasks} = useTask()
 
     const  data = reactive({
@@ -53,10 +53,10 @@ export default {
       showAllTasks:false,
     })
 
-    onMounted(()=>{
-      isUser()
-      // autoUpdateTasks()
-    })
+    // onMounted(()=>{
+    //   isUser()
+    //   // autoUpdateTasks()
+    // })
   
     let showCreateTask = ref(false)
 

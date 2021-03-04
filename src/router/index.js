@@ -4,6 +4,7 @@ import Auth from '../views/Auth.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Clients from '../views/Clients.vue'
 import User from '../views/User.vue'
+import Prices from '../views/Prices.vue'
 
 const routes = [
   {
@@ -31,6 +32,11 @@ const routes = [
     name:'User',
     component: User,
     props:true
+  },
+  {
+    path:'/prices',
+    name: 'Prices',
+    component: Prices
   }
   
 ]

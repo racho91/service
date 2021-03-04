@@ -5,6 +5,8 @@ const state=reactive({
 })
 
 const createNotification = (message,type,time)=>{
+    
+    console.log('syzdavane na izvestie ',message)
     let date = new Date()
     let timeOut = parseInt(time)
     let id= date.toISOString()+Math.random()
@@ -21,12 +23,16 @@ const createNotification = (message,type,time)=>{
 export default function useNotifications(){
 
     const addNotification= (message,type,time)=>{
+        console.log('add notification',state.notifications)
         if (state.notifications.length>0){
             console.log(message,state.notifications[length-1])
             if (message === state.notifications[length-1]){
                 createNotification(message,type,time)
             }
 
+        }
+        else{
+            createNotification(message,type,time)
         }
     }   
 

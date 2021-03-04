@@ -14,7 +14,7 @@
   <div class="control-bottom" v-if="pagination.pagesArray.length>1">
     <Button @button-click="handleActivePage(1)" title="Начало" color="#D35400" type="reverse" />  
     <Button @button-click="handleActivePage(page)" v-for="page in pagination.pagesArray" :key="page" :title="''+page+''" color="#D35400" type="reverse" />  
-    <Button @button-click="handleActivePage(pagination.pageCount)" title="Край" color="#D35400" type="reverse" />  
+    <Button @button-click="handleActivePage(pagination.pageCount)" title="Край" color="#D35400" type="reverse" /> 
   </div>
     
     <!-- <p @click="handleActivePage(1)">Pyrva stranica</p>

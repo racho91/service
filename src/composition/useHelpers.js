@@ -36,10 +36,35 @@ export  default function useHelpers(){
 
     }
 
+    //check for true value in object
+    const fieldValidation = (values)=>{
+    let hasError = false
+    let errors= []
+    Object.entries(values).forEach(([key, value]) =>{
+      
+      console.log(`${key}: ${value}`)
+        if (value){
+          errors.push(true)
+        }else{
+          errors.push(false)
+        }
+      } 
+    )
+    errors.forEach(element => {
+      if(element){
+        hasError=true
+        console.log('ima greshka')
+      }
+    })
+    return !hasError
+
+  }
+
 
     return{
         round,
         fillArrayWihtIndexPlusOne,
-        paginateArray
+        paginateArray,
+        fieldValidation
     }
 }

@@ -5,11 +5,13 @@ import useUiState from './useUiState'
 import useNotifications from './useNotifications' 
 import useTasks from './useTasks'
 import useClients from './useClients'
+import usePrices from './usePrices'
 
 let {loadingStart,loadingEnd}=useUiState()
 let {addNotification}= useNotifications()
 let {clearTasks,autoUpdateTasks}=useTasks()
 let {autoUpdateClients}=useClients()
+let {subServices}=usePrices()
 
 const state = reactive({
     user:{
@@ -124,6 +126,7 @@ export default function useAuth(){
             state.user.role='administrator'
             autoUpdateClients()
             autoUpdateTasks()
+            subServices()
        } else {
             state.user.role='user'
        }
@@ -157,6 +160,7 @@ export default function useAuth(){
                 name:name
             } 
             isAdmin()
+            router.push('dashboard')
             loadingEnd()
         }else{
             clearTasks()

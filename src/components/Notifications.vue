@@ -34,7 +34,7 @@ export default {
   top: 0;
   display: flex;
   width: 20em;
-  height: 100vh;
+  /* height: 100vh; */
   flex-flow: column;
 }
 

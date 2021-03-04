@@ -65,7 +65,7 @@ export default function useClients(){
                 })
             })
             state.clients.sort((a,b)=>a.name.localeCompare(b.name))
-            addNotification('Клиентите са заредени или е променено е съдържание в Клиентите !','info',2000)
+            // addNotification('Клиентите са заредени или е променено е съдържание в Клиентите !','info',2000)
         })
     }
 

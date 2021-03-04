@@ -1,15 +1,17 @@
 <template>
 <div class="form-input">    
     <label :for="name">
-      {{label}}
-      <input v-if="type!= 'textarea'" :name="name" :type="type" :value="data" :alt="name" @input="$emit('update:data', $event.target.value)">
-      <textarea v-else :name="name" :id="id" :cols="cols" :rows="rows" :value="data" :alt="name" @input="$emit('update:data', $event.target.value)"></textarea>
+        {{label}}
+        <input v-if="type!= 'textarea'" @blur="handleError()" :name="name" :type="type" :value="data" :alt="name" @input="$emit('update:data', $event.target.value)">
+        <textarea  v-else :name="name"  @blur="handleError()" :id="id" :cols="cols" :rows="rows" :value="data" :alt="name" @input="$emit('update:data', $event.target.value)"></textarea>
+        <span class="sp">{{error}}</span>
     </label>
 </div>
   
 </template>
 
 <script>
+import { toRefs,reactive, watch} from 'vue';
 export default {
     props:{
         data:String,
@@ -31,8 +33,52 @@ export default {
         rows:{
             default:10
         },
+        simbols:{
+            default:3
+        },
+        inputError:{
+            type:Boolean,
+            default:false
+        },
+        chekForError:{
+            type:Boolean,
+            default:false
+        }
     },
-    emits:['update:data']
+    emits:['update:data','update:inputError'],
+    setup(props,{emit}){
+        const state = reactive({
+            error:''
+        })
+        const handleError = ()=>{
+            // console.log(props.data.length)
+            // console.log(parseInt(props.simbols))
+
+           if ( props.data.length > parseInt(props.simbols)  ){
+               state.error=''
+               emit('update:inputError',false)
+           }else{
+               state.error= 'Недостатично символи !'
+               emit('update:inputError',true)
+           }
+        //    console.log(state.error)
+        //    console.log(props.inputError,'prop')
+        } 
+        watch(
+            ()=>props.chekForError,
+            (newvalue)=>{
+                if(newvalue){
+                    handleError()
+                }
+               
+            }
+
+        )
+        return {
+            ...toRefs(state),
+           handleError,
+        }
+    }
 }
 </script>
 
@@ -41,7 +87,7 @@ export default {
 input,textarea{
     position: relative;
     margin: auto;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     width: 100%;
     overflow: hidden;
     height: 20px;
@@ -93,6 +139,13 @@ label:focus-within {
 
 .bold{
     font-weight: 700;
+}
+.sp{
+    display: block;
+    margin: auto;
+    text-align: center;
+    color:maroon;
+    margin-bottom: 18px;
 }
 p{
     margin: 0;

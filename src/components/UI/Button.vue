@@ -1,6 +1,8 @@
 <template>
-    <button @click.prevent="$emit('button-click')" v-if="type === 'reverse'" class="reverse" v-bind:style="{color:color,borderColor:color}">{{title}}</button>
-    <button @click.prevent="$emit('button-click')" v-if="type === 'normal'" class="reverse" v-bind:style="{backgroundColor:color,borderColor:color}">{{title}}</button>
+    <button @click.prevent="$emit('button-click')" v-if="type === 'reverse' && !disabled" class="reverse" v-bind:style="{color:color,borderColor:color}">{{title}}</button>
+    <button @click.prevent="$emit('button-click')" v-if="type === 'normal' && !disabled" class="reverse" v-bind:style="{backgroundColor:color,borderColor:color}">{{title}}</button>
+    <button @click.prevent="" v-if="type === 'reverse' && disabled" class="reverse disabled" v-bind:style="{color:'gray',borderColor:'gray'}">{{title}}</button>
+    <button @click.prevent="" v-if="type === 'normal' && disabled" class="reverse disabled" v-bind:style="{color:'white',backgroundColor:'gray',borderColor:'white'}">{{title}}</button>
 </template>
 
 <script>
@@ -11,7 +13,12 @@ export default {
         'title':String,
         'color':String,
         'type':String,
+        'disabled':{
+            type:Boolean,
+            default:false
+        }
     }
+    
 }
 </script>
 
@@ -25,5 +32,8 @@ button{
     border: 1px solid rgb(238, 238, 238);
     outline:none;
 
+}
+.disabled{
+    color:gray
 }
 </style>

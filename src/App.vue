@@ -1,5 +1,5 @@
 <template>
-  <!-- <Notifications/> -->
+  <Notifications/>
   <div class="main-navigation"></div>
   <div class="content">
       <router-view/>
@@ -8,27 +8,27 @@
 </template>
 
 <script>
-// import {onMounted} from 'vue'
+import {onMounted} from 'vue'
 
-// import Notifications from './components/Notifications'
-// import useUiState from'./comp-functions/useUiState'
-// import useAuth from './comp-functions/useAuth'
-// import useTasks from './comp-functions/useTasks'
+import Notifications from './components/Notifications'
+import useUiState from'./composition/useUiState'
+import useAuth from './composition/useAuth'
+// import useTasks from './composition/useTasks'
 export default {
   name:'App',
   components:{
-    // Notifications
+    Notifications
+  },
+  setup(){  
+    let {isUser}=useAuth()
+    // let {autoUpdateTasks}=useTasks() 
+    let {isLoading,toggleMenu,isMenuOpen}=useUiState()
+    onMounted(()=>{
+      isUser()
+      // autoUpdateTasks()
+    })
+    return {isLoading,toggleMenu,isMenuOpen}
   }
-  // setup(){  
-  //   let {isUser}=useAuth()
-  //   // let {autoUpdateTasks}=useTasks() 
-  //   let {isLoading,toggleMenu,isMenuOpen}=useUiState()
-  //   onMounted(()=>{
-  //     isUser()
-  //     // autoUpdateTasks()
-  //   })
-  //   return {isLoading,toggleMenu,isMenuOpen}
-  // }
 }
 </script>
 

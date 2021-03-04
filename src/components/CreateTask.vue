@@ -5,15 +5,15 @@
         <h4>Създаване на задача</h4>
     </template>
     <template v-slot:modal-content> 
-      <AutoCompliteInput v-model:data="selected.value" label="Телефон на клиент"  name="phone" id="phone" :options="clientOptions"  :isDisabled="isDisabled"  />
-      <Input v-model:data="selected.name" type="text" label="Имена на клиент" name="name" id="Name"/>
-      <AutoCompliteInput v-model:data="type" label="Тип на устройство"  name="as" id="type" :options="typeOptions"    />
-      <AutoCompliteInput v-model:data="condition" label="Състояние"  name="condition" id="as" :options="conditionOptions"   />
-      <Input v-model:data="description" type="textarea" label="Описание" name="desc" id="Desc"/>
+      <AutoCompliteInput v-model:data="selected.value" label="Телефон на клиент"  name="phone" id="phone" :options="clientOptions"  v-model:inputError="errors.phone" :isDisabled="isDisabled" :chekForError="chekForError" />
+      <Input v-model:data="selected.name" type="text" label="Имена на клиент" name="name" id="Name"  v-model:inputError="errors.name" :chekForError="chekForError" />
+      <AutoCompliteInput v-model:data="type" label="Тип на устройство"  name="as" id="type" :options="typeOptions"  v-model:inputError="errors.type" :chekForError="chekForError" />
+      <AutoCompliteInput v-model:data="condition" label="Състояние"  name="condition" id="as" :options="conditionOptions"  v-model:inputError="errors.condition" :chekForError="chekForError" />
+      <Input v-model:data="description" type="textarea" label="Описание" name="desc" id="Desc"  v-model:inputError="errors.description" :chekForError="chekForError"  />
     </template>
     <template v-slot:modal-actions> 
       <Button @button-click="clearSelected" title="Изчисти" color="#FAC05E" type="normal" />  
-      <Button @button-click="createTask" title="Запиши" color="#59CD90" type="normal" /> 
+      <Button @button-click="createTask" title="Запиши" color="#59CD90" type="normal" :disabled="buttonStatus" /> 
     </template>
   </Modal>
 
@@ -90,6 +90,8 @@ import useToPdf from '../composition/useToPdf'
 import useTasks from '../composition/useTasks'
 import useClients from '../composition/useClients'
 import useAuth from '../composition/useAuth'
+import useHelpers from '../composition/useHelpers'
+
 
 export default {
   name: 'CreateTask',
@@ -106,7 +108,8 @@ export default {
     const {addTask,curentTask} = useTasks()
     const {addClient,autoSelectClients,autoUpdateClients}=useClients()
     const {user}=useAuth()
-
+    const {fieldValidation}=useHelpers()
+    // const {u} = usePromise()
     let data = reactive({
         user:{
           email:'',
@@ -131,7 +134,16 @@ export default {
         description:'',
         isDisabled:false,
         taskId:'',
-        activeModal:false
+        activeModal:false,
+        chekForError:false,
+        buttonStatus:false,
+        errors:{
+          name:false,
+          phone:false,
+          type:false,
+          condition:false,
+          description:false
+        }
         
     })
 
@@ -140,7 +152,16 @@ export default {
         console.log('Klientite sa zaredeni')
     })
 
+    
+   
+
     const createTask = ()=>{
+      data.chekForError=true
+      data.buttonStatus = !fieldValidation(data.errors) 
+      console.log(data.buttonStatus)
+      setTimeout(
+        ()=>{
+          if (!data.buttonStatus){
         let newTask = {
           desc:data.description,
           type:data.type,
@@ -167,16 +188,19 @@ export default {
               console.log('err',err)
             })
           })
-        }else{
-          addTask(newTask,data.selected).then((result)=>{
-            console.log(result)
-            data.taskId=result.id,
-            downloadPdf()
-          }).catch((err)=>{
-            console.log('err',err)
-          })
+          }else{
+            addTask(newTask,data.selected).then((result)=>{
+              console.log(result)
+              data.taskId=result.id,
+              downloadPdf()
+            }).catch((err)=>{
+              console.log('err',err)
+            })
+          }
         }
-        
+      },600)
+
+ 
     }
 
     const downloadPdf = ()=>{
@@ -197,8 +221,15 @@ export default {
       data.taskId='',
       data.type='',
       data.condition='',
-      data.isDisabled=false
-      
+      data.isDisabled=false,
+      data.errors={
+        name:false,
+        phone:false,
+        type:false,
+        condition:false,
+        description:false
+      },
+      data.buttonStatus=false
     }
 
     
@@ -217,12 +248,21 @@ export default {
         }
       })
     })
+    watch(
+      ()=>data.errors,
+      (errors)=>{
+        data.buttonStatus = !fieldValidation(errors)
+      },
+      {deep:true}
+    )
+
 
     const openModal = ()=>{
       data.activeModal=true
     }
     const closeModal = ()=>{
       data.activeModal=false
+      clearSelected()
     }
    
    
